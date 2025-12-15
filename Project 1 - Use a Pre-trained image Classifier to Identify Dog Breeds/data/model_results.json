@@ -1,0 +1,29 @@
+{
+  "resnet": {
+    "pct_correct_notdogs": 90.0,
+    "pct_correct_dogs": 100.0,
+    "pct_correct_breed": 90.0,
+    "pct_match": 82.5,
+    "n_images": 40,
+    "n_dogs_img": 30,
+    "n_notdogs_img": 10
+  },
+  "alexnet": {
+    "pct_correct_notdogs": 100.0,
+    "pct_correct_dogs": 100.0,
+    "pct_correct_breed": 80.0,
+    "pct_match": 75.0,
+    "n_images": 40,
+    "n_dogs_img": 30,
+    "n_notdogs_img": 10
+  },
+  "vgg": {
+    "pct_correct_notdogs": 100.0,
+    "pct_correct_dogs": 100.0,
+    "pct_correct_breed": 93.33333333333333,
+    "pct_match": 87.5,
+    "n_images": 40,
+    "n_dogs_img": 30,
+    "n_notdogs_img": 10
+  }
+}
