@@ -1,18 +1,28 @@
 import ast
+import os
 from PIL import Image
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 import torchvision.models as models
 from torch import __version__
 
-resnet18 = models.resnet18(pretrained=True)
-alexnet = models.alexnet(pretrained=True)
-vgg16 = models.vgg16(pretrained=True)
+# Use weights='DEFAULT' for newer PyTorch versions, fallback to pretrained=True for older versions
+try:
+    resnet18 = models.resnet18(weights='DEFAULT')
+    alexnet = models.alexnet(weights='DEFAULT')
+    vgg16 = models.vgg16(weights='DEFAULT')
+except TypeError:
+    # Fallback for older PyTorch versions
+    resnet18 = models.resnet18(pretrained=True)
+    alexnet = models.alexnet(pretrained=True)
+    vgg16 = models.vgg16(pretrained=True)
 
 models = {'resnet': resnet18, 'alexnet': alexnet, 'vgg': vgg16}
 
-# obtain ImageNet labels
-with open('imagenet1000_clsid_to_human.txt') as imagenet_classes_file:
+# obtain ImageNet labels - use path relative to this script's directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+imagenet_file = os.path.join(script_dir, 'imagenet1000_clsid_to_human.txt')
+with open(imagenet_file) as imagenet_classes_file:
     imagenet_classes_dict = ast.literal_eval(imagenet_classes_file.read())
 
 def classifier(img_path, model_name):
@@ -69,6 +79,10 @@ def classifier(img_path, model_name):
         output = model(data)
 
     # return index corresponding to predicted class
-    pred_idx = output.data.numpy().argmax()
+    # Use detach() for newer PyTorch versions
+    if int(pytorch_ver[0]) > 0 or int(pytorch_ver[1]) >= 4:
+        pred_idx = output.detach().numpy().argmax()
+    else:
+        pred_idx = output.data.numpy().argmax()
 
     return imagenet_classes_dict[pred_idx]

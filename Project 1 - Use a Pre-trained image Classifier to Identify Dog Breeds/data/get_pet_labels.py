@@ -40,6 +40,45 @@ def get_pet_labels(image_dir):
       List. The list contains for following item:
          index 0 = pet image label (string)
     """
+    # Creates list of files in directory
+    in_files = listdir(image_dir)
+    
+    # Creates empty dictionary for the results (pet labels, etc.)
+    results_dic = dict()
+    
+    # Processes through each file in the directory, extracting only the words
+    # of the file that contain the pet image label
+    for idx in range(0, len(in_files), 1):
+        
+        # Skips file if starts with . (like .DS_Store of Mac OSX) because it 
+        # isn't an pet image file
+        if in_files[idx][0] != ".":
+            
+            # Creates temporary label variable to hold pet label name extracted 
+            # from filename by removing extension, splitting by underscore,
+            # removing the last part (number), and joining with spaces
+            pet_label = ""
+            
+            # Extract pet label from filename
+            # Remove file extension
+            filename_no_ext = in_files[idx].rsplit('.', 1)[0]
+            # Split by underscore
+            parts = filename_no_ext.split('_')
+            # Remove the last part (number) and join the rest with spaces
+            pet_label_parts = [part for part in parts[:-1]]
+            pet_label = ' '.join(pet_label_parts)
+            # Convert to lowercase and strip whitespace
+            pet_label = pet_label.lower().strip()
+            
+            # If filename doesn't already exist in dictionary add it and it's
+            # pet label - otherwise print an error message because indicates 
+            # duplicate files (filenames)
+            if in_files[idx] not in results_dic:
+                results_dic[in_files[idx]] = [pet_label]
+            else:
+                print("** Warning: Duplicate files exist in directory:", 
+                      in_files[idx])
+    
     # Replace None with the results_dic dictionary that you created with this
     # function
-    return None
+    return results_dic
