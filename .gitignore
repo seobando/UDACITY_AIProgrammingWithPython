@@ -1,0 +1,10 @@
+# Ignore all JPG/JPEG images
+*.jpg
+*.jpeg
+*.JPG
+*.JPEG
+
+# Ignore large model checkpoint files
+*.pth
+checkpoint.pth
+**/checkpoint.pth
