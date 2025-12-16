@@ -21,7 +21,9 @@ def get_input_args():
 
 def load_checkpoint(filepath):
     """Load a checkpoint and rebuild the model."""
-    checkpoint = torch.load(filepath, map_location='cpu')
+    # Load checkpoint with weights_only=False for PyTorch 2.6+ compatibility
+    # This is safe since the checkpoint is from our own training
+    checkpoint = torch.load(filepath, map_location='cpu', weights_only=False)
     
     # Get architecture
     arch = checkpoint.get('arch', 'vgg16')
